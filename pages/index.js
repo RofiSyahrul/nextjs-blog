@@ -1,7 +1,6 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import cn from 'classnames'
-import Layout, { siteTitle } from '../components/layout'
+import Layout from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import { getSortedPostsData } from '../lib/posts'
 import DateComponent from '../components/date'
@@ -25,12 +24,9 @@ export async function getStaticProps() {
 export default function Home({ allPostsData }) {
   return (
     <Layout home>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
       <section className={utilStyles.headingMd}>
         <p>
-          Hi, I am Syahrul Rofi. You can call me Rofi. I am a frontend engineer
+          Hi, I am Syahrul Rofi. You can call me Rofi. I am a frontend engineer.
         </p>
         <p>
           (This is a sample website - you’ll be building a site like this on{' '}
@@ -40,14 +36,18 @@ export default function Home({ allPostsData }) {
       <section className={cn(utilStyles.headingMd, utilStyles.padding1px)}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, title, date }) => (
+          {allPostsData.map(({ id, title, date, modifiedDate }) => (
             <li className={utilStyles.listItem} key={id}>
               <Link href={`/posts/${id}`}>
                 <a>{title}</a>
               </Link>
               <br />
               <small className={utilStyles.lightText}>
-                <DateComponent dateString={date} />
+                <DateComponent dateString={date} title='Created' />
+              </small>
+              <br />
+              <small className={utilStyles.lightText}>
+                <DateComponent dateString={modifiedDate} title='Modified' />
               </small>
             </li>
           ))}
