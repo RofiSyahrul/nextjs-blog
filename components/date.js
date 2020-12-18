@@ -3,12 +3,18 @@ import dayjs from 'dayjs'
 /**
  * @typedef {Object} DateProps
  * @property {string} dateString
+ * @property {string} title
  */
 
 /** @type {React.FC<DateProps>} */
-const DateComponent = ({ dateString }) => {
+const DateComponent = ({ dateString, title }) => {
   const formatted = dayjs(dateString).format('MMMM D, YYYY')
-  return <time dateTime={dateString}>{formatted}</time>
+  return (
+    <span title={title}>
+      {`${title}: `}
+      <time dateTime={dateString}>{formatted}</time>
+    </span>
+  )
 }
 
 DateComponent.displayName = 'Date'

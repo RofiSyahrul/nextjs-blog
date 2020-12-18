@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import DateComponent from '../../components/date'
 import Layout from '../../components/layout'
 import { getAllPostIds, getPostData } from '../../lib/posts'
@@ -16,16 +15,16 @@ import utilStyles from '../../styles/utils.module.css'
 
 /** @param {PostProps} props */
 export default function Post({ postData }) {
-  const { title, date, contentHtml } = postData
+  const { title, date, contentHtml, modifiedDate } = postData
   return (
-    <Layout>
-      <Head>
-        <title>{title}</title>
-      </Head>
+    <Layout title={title}>
       <article>
         <h1 className={utilStyles.headingXl}>{title}</h1>
         <div className={utilStyles.lightText}>
-          <DateComponent dateString={date} />
+          <DateComponent dateString={date} title='Created' />
+        </div>
+        <div className={utilStyles.lightText}>
+          <DateComponent dateString={modifiedDate} title='Modified' />
         </div>
         <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
       </article>

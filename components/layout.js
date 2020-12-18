@@ -4,9 +4,18 @@ import styles from './layout.module.css'
 import utilStyles from '../styles/utils.module.css'
 
 const name = 'Rofi'
-export const siteTitle = 'Next.js Sample Website'
+const ogImage =
+  'https://avatars1.githubusercontent.com/u/44445726?s=460&u=7226c3b6d6e2d2163dd0eab652c20aaba6775755&v=4'
+const siteTitle = 'Next.js Sample Website'
 
-export default function Layout({ children, home }) {
+/**
+ * @typedef {Object} LayoutProps
+ * @property {boolean=} home
+ * @property {string=} title
+ */
+
+/** @type {React.FC<LayoutProps>} */
+const Layout = ({ children, home, title = siteTitle }) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -15,14 +24,10 @@ export default function Layout({ children, home }) {
           name='description'
           content='Learn how to build a personal website using Next.js'
         />
-        <meta
-          property='og:image'
-          content={`https://og-image.now.sh/${encodeURI(
-            siteTitle
-          )}.png?theme=light&md=0&fontSize=75px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fnextjs-black-logo.svg`}
-        />
-        <meta name='og:title' content={siteTitle} />
+        <meta property='og:image' content={ogImage} />
+        <meta name='og:title' content={title} />
         <meta name='twitter:card' content='summary_large_image' />
+        <title>{title}</title>
       </Head>
       <header className={styles.header}>
         {home ? (
@@ -64,3 +69,5 @@ export default function Layout({ children, home }) {
     </div>
   )
 }
+
+export default Layout
