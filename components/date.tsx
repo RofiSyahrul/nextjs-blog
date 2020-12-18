@@ -1,13 +1,11 @@
 import dayjs from 'dayjs'
 
-/**
- * @typedef {Object} DateProps
- * @property {string} dateString
- * @property {string} title
- */
+interface DateProps {
+  dateString: string
+  title: string
+}
 
-/** @type {React.FC<DateProps>} */
-const DateComponent = ({ dateString, title }) => {
+const DateComponent: React.FC<DateProps> = ({ dateString, title }) => {
   const formatted = dayjs(dateString).format('MMMM D, YYYY')
   return (
     <span title={title}>
