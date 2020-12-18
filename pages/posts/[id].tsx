@@ -1,20 +1,18 @@
-import DateComponent from '../../components/date'
-import Layout from '../../components/layout'
-import { getAllPostIds, getPostData } from '../../lib/posts'
-import utilStyles from '../../styles/utils.module.css'
+import { GetStaticPaths, GetStaticProps } from 'next'
+import DateComponent from 'components/date'
+import Layout from 'components/layout'
+import { getAllPostIds, getPostData, PostData } from 'lib/posts'
+import utilStyles from 'styles/utils.module.css'
 
-/**
- * @typedef {Object} PostProps
- * @property {import('../../lib/posts').PostData} postData
- */
+interface PostProps {
+  postData: PostData
+}
 
-/**
- * @typedef {Object} PostParams
- * @property {string} id
- */
+type PostParams = {
+  id: string
+}
 
-/** @param {PostProps} props */
-export default function Post({ postData }) {
+const Post: React.FC<PostProps> = ({ postData }) => {
   const { title, date, contentHtml, modifiedDate } = postData
   return (
     <Layout title={title}>
@@ -32,8 +30,7 @@ export default function Post({ postData }) {
   )
 }
 
-/** @returns {ReturnType<import('next').GetStaticPaths<PostParams>>} */
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths<PostParams> = async () => {
   const paths = getAllPostIds()
   return {
     paths,
@@ -41,8 +38,9 @@ export async function getStaticPaths() {
   }
 }
 
-/** @type {import('next').GetStaticProps<PostProps, PostParams>} */
-export const getStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<PostProps, PostParams> = async ({
+  params,
+}) => {
   const postData = await getPostData(params.id)
   return {
     props: {
@@ -50,3 +48,5 @@ export const getStaticProps = async ({ params }) => {
     },
   }
 }
+
+export default Post

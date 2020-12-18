@@ -1,17 +1,15 @@
 import Link from 'next/link'
 import cn from 'classnames'
-import Layout from '../components/layout'
-import utilStyles from '../styles/utils.module.css'
-import { getSortedPostsData } from '../lib/posts'
-import DateComponent from '../components/date'
+import Layout from 'components/layout'
+import utilStyles from 'styles/utils.module.css'
+import { getSortedPostsData, PostItem } from 'lib/posts'
+import DateComponent from 'components/date'
 
-/**
- * @typedef {Object} HomeProps
- * @property {import('../lib/posts').PostItem[]} allPostsData
- */
+interface HomeProps {
+  allPostsData: PostItem[]
+}
 
-/** @returns {Promise<{ props: HomeProps }>} */
-export async function getStaticProps() {
+export async function getStaticProps(): Promise<{ props: HomeProps }> {
   const allPostsData = await getSortedPostsData()
   return {
     props: {
@@ -20,8 +18,7 @@ export async function getStaticProps() {
   }
 }
 
-/** @param {HomeProps} props */
-export default function Home({ allPostsData }) {
+export default function Home({ allPostsData }: HomeProps) {
   return (
     <Layout home>
       <section className={utilStyles.headingMd}>

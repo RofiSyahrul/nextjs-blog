@@ -1,21 +1,19 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from './layout.module.css'
-import utilStyles from '../styles/utils.module.css'
+import utilStyles from 'styles/utils.module.css'
 
 const name = 'Rofi'
 const ogImage =
   'https://avatars1.githubusercontent.com/u/44445726?s=460&u=7226c3b6d6e2d2163dd0eab652c20aaba6775755&v=4'
 const siteTitle = 'Next.js Sample Website'
 
-/**
- * @typedef {Object} LayoutProps
- * @property {boolean=} home
- * @property {string=} title
- */
+interface LayoutProps {
+  home?: boolean;
+  title?: string;
+}
 
-/** @type {React.FC<LayoutProps>} */
-const Layout = ({ children, home, title = siteTitle }) => {
+const Layout: React.FC<LayoutProps> = ({ children, home = false, title = siteTitle }) => {
   return (
     <div className={styles.container}>
       <Head>

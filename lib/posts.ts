@@ -7,39 +7,40 @@ import dayjs from 'dayjs'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
 
-/**
- * @typedef {Object} PostItem
- * @property {string} id
- * @property {string} title
- * @property {string} date
- * @property {string} modifiedDate
- * */
+interface MatterResultData {
+  title: string
+}
 
-/**
- * @typedef {PostItem & { contentHtml: string }} PostData
- */
+export interface PostItem extends MatterResultData {
+  id: string
+  date: string
+  modifiedDate: string
+}
 
-/**
- * @param {string} id
- * @returns {Promise<PostData>}
- */
-export async function getPostData(id, { withContent = true } = {}) {
+export interface PostData extends PostItem {
+  contentHtml?: string
+}
+
+export async function getPostData(
+  id: string,
+  { withContent = true } = {}
+): Promise<PostData> {
   const fullPath = path.join(postsDirectory, `${id}.md`)
   const stats = fs.statSync(fullPath)
   const date = dayjs(stats.birthtimeMs).format('YYYY-MM-DD')
   const modifiedDate = dayjs(stats.mtimeMs).format('YYYY-MM-DD')
   const fileContents = fs.readFileSync(fullPath, 'utf-8')
   const matterResult = matter(fileContents)
-  if (!withContent) return { id, ...matterResult.data, date, modifiedDate }
+  const data = matterResult.data as MatterResultData
+  if (!withContent) return { id, ...data, date, modifiedDate }
   const processedContent = await remark()
     .use(html)
     .process(matterResult.content)
   const contentHtml = processedContent.toString()
-  return { id, contentHtml, ...matterResult.data, date, modifiedDate }
+  return { id, contentHtml, ...data, date, modifiedDate }
 }
 
-/** @returns {Promise<PostItem[]>} */
-export async function getSortedPostsData() {
+export async function getSortedPostsData(): Promise<PostItem[]> {
   const fileNames = fs.readdirSync(postsDirectory)
   const allPostsData = await Promise.all(
     fileNames.map(fileName => {
@@ -55,13 +56,11 @@ export async function getSortedPostsData() {
   })
 }
 
-/**
- * @typedef {Object} PostId
- * @property {{ id: string }} params
- */
+interface PostId {
+  params: { id: string }
+}
 
-/** @returns {PostId[]} */
-export function getAllPostIds() {
+export function getAllPostIds(): PostId[] {
   const fileNames = fs.readdirSync(postsDirectory)
   return fileNames.map(fileName => ({
     params: { id: fileName.replace(/\.md$/, '') },
